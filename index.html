@@ -4,11 +4,47 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Mini Game</title>
   <script src="main.js" defer></script>
+  <script src="https://kit.fontawesome.com/347e8b698e.js" 
+          crossorigin="anonymous"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  
+  <div class="main">
+    <!-- backgroung_img -->
+    <img class="background" src="img/background.png">
+    <div class="app">
+      <div class="controller">
+        <div class="btn_box">
+          <button class="btn play_pause">
+            <i class="fa-solid fa-play"></i>
+            <!-- <i class="fa-solid fa-pause"></i> -->
+          </button>
+          </button>
+        </div>
+        <div class="timer">
+          00:10
+        </div>
+      </div>
+      <div class="counter">
+        <span class="count_num">10</span>
+      </div>
+      <div class="play_zone">
+        <img class="img_bug" src="img/bug.png">
+        <img class="img_bug" src="img/bug.png">
+        <img class="img_bug" src="img/bug.png">
+        <img class="img_carrot" src="img/carrot.png">
+        <img class="img_carrot" src="img/carrot.png">
+        <img class="img_carrot" src="img/carrot.png">
+      </div>
+    </div>
+    <div class="result_box">
+      <button class="btn replay">
+        <i class="fa-solid fa-arrow-rotate-right"></i>
+      </button>
+      <div class="result_msg">You Win!</div>
+    </div>
+  </div>
 </body>
 </html>
