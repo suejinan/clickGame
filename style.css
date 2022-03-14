@@ -46,7 +46,6 @@ body {
 }
 .btn:hover {
   transform: scale(1.1);
-  transition: all 200ms ease-in;
 }
 
 .timer {
@@ -58,13 +57,16 @@ body {
   font-size: 20px;
   text-align: center;
 }
+.time {
+  line-height: 26px;
+}
 
 .counter {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   margin: auto;
   background-color: #ffbc2c;
   border: #353535 solid 2px;
@@ -83,7 +85,7 @@ body {
   height: 50%;
 }
 
-.result_box {
+.result_popup {
   position: relative;
   top: 50%;
   transform: translate(0%, -50%);
@@ -98,6 +100,9 @@ body {
 
   -webkit-box-shadow: 7px 5px 8px -4px rgba(0, 0, 0, 0.81);
   box-shadow: 7px 5px 8px -4px rgba(0, 0, 0, 0.81);
+}
+.result_popup.hide {
+  display: none;
 }
 
 .result_msg {
