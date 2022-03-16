@@ -10,7 +10,6 @@ class Timer {
   countTime() {
     this.time--;
     if (this.time > 0) {
-      console.log(this.time);
       this.text.innerText = `00:0${this.time}`;
     } else {
       stopGame('lose');
@@ -77,28 +76,33 @@ class Field {
     this.height = this.fieldRec.height;
     this.minX = this.fieldRec.left;
     this.minY = this.fieldRec.top;
-    console.log(this.fieldRec);
+
+    this.field.addEventListener('click', (event) =>  {
+      this.clickItem(event);
+    });
+
   }
 
   setItems(itemType, itemNum) {
-    console.log(`setItems ${itemType}, ${itemNum}`);
     for(let i=0; i<itemNum; i++) {
-      const newItem = this.createItem(itemType, i);
+      const newItem = this.createItem(itemType);
       this.field.appendChild(newItem);
     }
   }
 
   initField() {
     this.field.innerHTML = '';
+    countNum = 10;
+    counter.innerText = '10';
     this.setItems(bug, 7);
     this.setItems(carrot, 10);
   }
 
-  createItem(type, id) {
+  createItem(type) {
     const item = document.createElement('img');
     item.setAttribute('class', `item`);
     item.setAttribute('src', `${type.img}`);
-    item.setAttribute('data-id', `${id}`);
+    item.setAttribute('data-type', `${type.type}`);
     this.getRandomCoord(item);
 
     return item
@@ -111,6 +115,22 @@ class Field {
     item.style.transform = `translateX(${randomX}px) translateY(${randomY}px)`;
   }
   
+  clickItem(event) {
+    const target = event.target;
+
+    if(target.dataset.type === 'carrot') {
+      target.remove();
+      countNum--;
+      counter.innerText = countNum;
+
+      if(countNum === 0) {
+        pop_up.showPopupScreen("win");
+      }
+      
+    } else {
+      stopGame("lose");
+    }
+  }
 }
 
 function startGame() {
@@ -137,6 +157,8 @@ const btn_play = document.querySelector('.play_stop');
 btn_play.innerHTML=`<i class="fa-solid fa-play"></i>`;
 
 const field = document.querySelector('.field');
+const counter = document.querySelector('.count_num');
+let countNum = 10;
 
 const time_text = document.querySelector(".time");
 const timer = new Timer(time_text);
