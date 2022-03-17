@@ -32,8 +32,8 @@ class Timer {
 
 class Popup {
   constructor() {
-    this.pop_up = document.querySelector('.result_popup');
-    this.msg = document.querySelector('.result_msg');
+    this.pop_up = document.querySelector('.pop-up');
+    this.msg = document.querySelector('.pop-up__msg');
     this.btn_replay = document.querySelector('.replay');
     
     this.btn_replay.addEventListener('click', () => {
@@ -179,14 +179,14 @@ const bug = {type:"bug", img:"img/bug.png", sound:"bug_pull.mp3"};
 const carrot = {type:"carrot", img:"img/carrot.png",sound:"carrot_pull.mp3"};
 
 let gameStarted = false;
-const btn_play = document.querySelector('.play_stop');
+const btn_play = document.querySelector('.game__button');
 btn_play.innerHTML=`<i class="fa-solid fa-play"></i>`;
 
-const field = document.querySelector('.field');
-const counter = document.querySelector('.count_num');
+const field = document.querySelector('.game__field');
+const counter = document.querySelector('.game__counter');
 let countNum = 10;
 
-const time_text = document.querySelector(".time");
+const time_text = document.querySelector(".game__timer");
 const timer = new Timer(time_text);
 const play_section = new Field(field);
 const pop_up = new Popup();

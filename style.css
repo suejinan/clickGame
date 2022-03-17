@@ -21,21 +21,21 @@ body {
   border-radius: 30px;
 }
 
-.app {
+.game {
   position: absolute;
   display: block;
   width: 100%;
   height: 100%;
 }
 
-.controller {
+.game__header {
   display: flex;
   justify-content: center;
   margin: 10px auto 20px;
   width: 200px;
 }
 
-.btn {
+.game__button {
   border: #353535 solid 2px;
   border-radius: 5px;
   background: none;
@@ -44,11 +44,11 @@ body {
   margin: 3px;
   cursor: pointer;
 }
-.btn:hover {
+.game__button:hover {
   transform: scale(1.1);
 }
 
-.timer {
+.game__timer {
   width: 80px;
   margin: 3px;
   background-color: #f0f0f0;
@@ -56,12 +56,10 @@ body {
   border-radius: 5px;
   font-size: 20px;
   text-align: center;
-}
-.time {
   line-height: 26px;
 }
 
-.counter {
+.game__counter {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,13 +69,10 @@ body {
   background-color: #ffbc2c;
   border: #353535 solid 2px;
   border-radius: 50%;
-}
-
-.count_num {
   font-size: 28px;
 }
 
-.field {
+.game__field {
   position: relative;
   bottom: 0;
   width: 100%;
@@ -90,7 +85,7 @@ body {
   z-index: 0;
 }
 
-.result_popup {
+.pop-up {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -109,11 +104,24 @@ body {
   -webkit-box-shadow: 7px 5px 8px -4px rgba(0, 0, 0, 0.81);
   box-shadow: 7px 5px 8px -4px rgba(0, 0, 0, 0.81);
 }
-.result_popup.hide {
+.pop-up.hide {
   display: none;
 }
 
-.result_msg {
+.pop-up__msg {
   margin: 10px;
   font-size: 30px;
+}
+
+.pop-up__button {
+  display: block;
+  border: #353535 solid 2px;
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+  margin: 5px auto;
+  cursor: pointer;
+}
+.pop-up__button:hover {
+  transform: scale(1.1);
 }

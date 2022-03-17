@@ -12,37 +12,29 @@
   <link rel="icon" href="img/favicon.ico">
 </head>
 <body>
-  <div class="main">
+  <section class="main">
     <img class="background" src="img/background.png">
-    <div class="app">
-      <div class="controller">
-        <div class="btn_box">
-          <button class="btn play_stop">
-            <i class="fa-solid fa-play"></i>
-            <i class="fa-solid fa-square"></i>
-          </button>
-          </button>
-        </div>
+    <div class="game">
+      <header class="game__header">
+        <button class="game__button play_stop">
+          <i class="fa-solid fa-play"></i>
+          <i class="fa-solid fa-square"></i>
+        </button>
 
-        <div class="timer">
-          <span class="time">00:10</span>
-        </div>
-      </div>
-
-      <div class="counter">
-        <span class="count_num">10</span>
-      </div>
-
-      <div class="field">
-      </div>
+        <span class="game__timer">
+          00:10
+        </span>
+      </header>
+      <div class="game__counter">10</div>
+      <section class="game__field"></section>
     </div>
     <!-- pop_up -->
-    <div class="result_popup hide">
-      <button class="btn replay">
+    <section class="pop-up hide">
+      <button class="pop-up__button replay">
         <i class="fa-solid fa-arrow-rotate-right"></i>
       </button>
-      <div class="result_msg">You Win!</div>
-    </div>
+      <span class="pop-up__msg">You Win!</span>
+    </section>
   </div>
 </body>
 </html>
