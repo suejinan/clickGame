@@ -59,6 +59,8 @@ class Popup {
 
     btn_play.style.visibility = "hidden";
     this.pop_up.classList.remove('hide');
+    music.stopMusic(music.bgMusic);
+    music.playMusic(music.alertMusic);
   }
   
   hidePopupScreen() {
@@ -119,18 +121,40 @@ class Field {
     const target = event.target;
 
     if(target.dataset.type === 'carrot') {
+      music.playMusic(music.carrotPull);
       target.remove();
       countNum--;
       counter.innerText = countNum;
-
       if(countNum === 0) {
         pop_up.showPopupScreen("win");
+        music.playMusic(music.winMusic);
+        
       }
       
     } else {
+      music.playMusic(music.bugPull);
       stopGame("lose");
     }
   }
+}
+
+class Music {
+  constructor() {
+    this.bgMusic = new Audio('sound/bg.mp3');
+    this.bugPull = new Audio('sound/bug_pull.mp3');
+    this.carrotPull = new Audio('sound/carrot_pull.mp3');
+    this.winMusic = new Audio('sound/game_win.mp3');
+    this.alertMusic = new Audio('sound/alert.wav');
+  }
+
+  playMusic(audio) {
+    audio.play();
+  }
+
+  stopMusic(audio) {
+    audio.pause();
+  }
+
 }
 
 function startGame() {
@@ -139,12 +163,14 @@ function startGame() {
   timer.startTime();
   console.log("--------- start ---------");
   gameStarted = true;
+  music.playMusic(music.bgMusic);
   btn_play.innerHTML=`<i class="fa-solid fa-square"></i>`;
 }
 
 function stopGame(result) {
   timer.resetTime();
   gameStarted = false;
+  music.stopMusic(music.bgMusic);
   pop_up.showPopupScreen(result);
   console.log("--------- stop ---------");
 }
@@ -164,6 +190,7 @@ const time_text = document.querySelector(".time");
 const timer = new Timer(time_text);
 const play_section = new Field(field);
 const pop_up = new Popup();
+const music = new Music();
 
 btn_play.addEventListener('click', () => {
   if (!gameStarted) {
