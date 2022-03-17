@@ -1,4 +1,5 @@
 'use strict';
+const CARROT_SIZE = 80;
 
 class Timer {
   constructor(text) {
@@ -111,8 +112,8 @@ class Field {
   }
 
   getRandomCoord(item) {
-    const randomX = Math.random()*(this.width-item.width) + this.minX-item.width;
-    const randomY = Math.random()*(this.height-item.height) + this.minY-item.height;
+    const randomX = Math.random()*(this.width-CARROT_SIZE) ;
+    const randomY = Math.random()*(this.height-CARROT_SIZE);
 
     item.style.transform = `translateX(${randomX}px) translateY(${randomY}px)`;
   }
