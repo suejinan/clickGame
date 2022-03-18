@@ -52,6 +52,9 @@ button {
   border: #353535 solid 2px;
   background-color: #f0f0f0;
   visibility: hidden;
+
+  user-select: none;
+  cursor: auto;
 }
 
 .game__counter {
@@ -65,6 +68,9 @@ button {
   border: #353535 solid 2px;
   background-color: #ffbc2c;
   visibility: hidden;
+
+  user-select: none;
+  cursor: auto;
 }
 
 .game__field {
@@ -79,6 +85,10 @@ button {
   top: 0;
   left: 0;
   z-index: 0;
+  transition: transform 100ms ease-in;
+}
+.item:hover {
+  transform: scale(1.1);
 }
 
 .pop-up {
