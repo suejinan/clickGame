@@ -1,33 +1,55 @@
 'use strict';
 const CARROT_SIZE = 80;
+const CARROT_COUNT = 10;
+const BUG_COUNT = 7;
+const GAME_DURATION_SEC = 10;
+
+const bug = {type:"bug", img:"img/bug.png", sound:"bug_pull.mp3"};
+const carrot = {type:"carrot", img:"img/carrot.png",sound:"carrot_pull.mp3"};
+
+const btn_play = document.querySelector('.game__button');
+
+const field = document.querySelector('.game__field');
+const gameCounter = document.querySelector('.game__counter');
+const gameTimer = document.querySelector(".game__timer");
+
+let gameStarted = false;
+let countNum = 0;
+let timeLeft = GAME_DURATION_SEC;
 
 class Timer {
-  constructor(text) {
-    this.time = 10;
-    this.text = text;
-    this.interval;
+  constructor(timeContainer) {
+    this.timeContainer = timeContainer;
+    this.timer = undefined;
   }
 
   countTime() {
-    this.time--;
-    if (this.time > 0) {
-      this.text.innerText = `00:0${this.time}`;
+    this.updateTimerText(timeLeft);
+    if (timeLeft > 0) {
+      --timeLeft;
+      console.log(timeLeft);
+      this.updateTimerText(timeLeft);
+
     } else {
-      stopGame('lose');
+      clearInterval(this.timer);
+      finishGame('lose');
     }
   }
 
   startTime() {
-    this.time = 10;
-    this.text.innerText = '00:10';
-    this.interval = setInterval(() => {
+    this.timer =  setInterval(() => {
       this.countTime();
     }, 1000);
   }
-  
-  resetTime() {
-    console.log('reset');
-    clearInterval(this.interval);
+
+  stopTime() {
+    clearInterval(this.timer);
+  }
+
+  updateTimerText(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    this.timeContainer.innerText = `${minutes}:${seconds}`;
   }
 }
 
@@ -38,11 +60,14 @@ class Popup {
     this.btn_replay = document.querySelector('.replay');
     
     this.btn_replay.addEventListener('click', () => {
+      this.hidePopupScreen();
       startGame();
     });
   }
   
   showPopupScreen(msg) {
+    hideGameButton();
+
     switch (msg) {
       case 'win':
         this.msg.textContent = 'You Won ! 🥳';
@@ -58,7 +83,6 @@ class Popup {
         break;
     } 
 
-    btn_play.style.visibility = "hidden";
     this.pop_up.classList.remove('hide');
     music.stopMusic(music.bgMusic);
     music.playMusic(music.alertMusic);
@@ -80,25 +104,22 @@ class Field {
     this.minX = this.fieldRec.left;
     this.minY = this.fieldRec.top;
 
-    this.field.addEventListener('click', (event) =>  {
-      this.clickItem(event);
+    this.field.addEventListener('click', (event) => {
+      this.onClickItem(event)
     });
 
   }
 
   setItems(itemType, itemNum) {
-    for(let i=0; i<itemNum; i++) {
+    for (let i=0; i<itemNum; i++) {
       const newItem = this.createItem(itemType);
       this.field.appendChild(newItem);
     }
   }
 
   initField() {
-    this.field.innerHTML = '';
-    countNum = 10;
-    counter.innerText = '10';
-    this.setItems(bug, 7);
-    this.setItems(carrot, 10);
+    this.setItems(bug, BUG_COUNT);
+    this.setItems(carrot, CARROT_COUNT);
   }
 
   createItem(type) {
@@ -118,24 +139,31 @@ class Field {
     item.style.transform = `translateX(${randomX}px) translateY(${randomY}px)`;
   }
   
-  clickItem(event) {
+  onClickItem(event) {
+    if (!gameStarted) {
+      return;
+    }
     const target = event.target;
 
-    if(target.dataset.type === 'carrot') {
+    if (target.dataset.type === 'carrot') {
       music.playMusic(music.carrotPull);
       target.remove();
       countNum--;
-      counter.innerText = countNum;
-      if(countNum === 0) {
-        pop_up.showPopupScreen("win");
+      this.updateCountBoard();
+      if (countNum === 0) {
+        finishGame("win");
         music.playMusic(music.winMusic);
-        
       }
       
-    } else {
+    } else if (target.dataset.type === 'bug') {
+      timer.stopTime();
       music.playMusic(music.bugPull);
-      stopGame("lose");
+      finishGame("lose");
     }
+  }
+
+  updateCountBoard() {
+    gameCounter.innerText = countNum;
   }
 }
 
@@ -158,37 +186,7 @@ class Music {
 
 }
 
-function startGame() {
-  pop_up.hidePopupScreen();
-  play_section.initField();
-  timer.startTime();
-  console.log("--------- start ---------");
-  gameStarted = true;
-  music.playMusic(music.bgMusic);
-  btn_play.innerHTML=`<i class="fa-solid fa-square"></i>`;
-}
-
-function stopGame(result) {
-  timer.resetTime();
-  gameStarted = false;
-  music.stopMusic(music.bgMusic);
-  pop_up.showPopupScreen(result);
-  console.log("--------- stop ---------");
-}
-
-const bug = {type:"bug", img:"img/bug.png", sound:"bug_pull.mp3"};
-const carrot = {type:"carrot", img:"img/carrot.png",sound:"carrot_pull.mp3"};
-
-let gameStarted = false;
-const btn_play = document.querySelector('.game__button');
-btn_play.innerHTML=`<i class="fa-solid fa-play"></i>`;
-
-const field = document.querySelector('.game__field');
-const counter = document.querySelector('.game__counter');
-let countNum = 10;
-
-const time_text = document.querySelector(".game__timer");
-const timer = new Timer(time_text);
+const timer = new Timer(gameTimer);
 const play_section = new Field(field);
 const pop_up = new Popup();
 const music = new Music();
@@ -197,7 +195,53 @@ btn_play.addEventListener('click', () => {
   if (!gameStarted) {
     startGame();
   } else {
-    stopGame('replay');
+    stopGame();
   }
-
+  console.log(gameStarted);
 });
+
+function startGame() {
+  gameStarted = true;
+  initGame();
+  showStopButton();
+  showTimerAndScore();
+  timer.startTime();
+  music.playMusic(music.bgMusic);
+}
+
+function stopGame() {
+  gameStarted = false;
+  timer.stopTime();
+  pop_up.showPopupScreen("replay");
+  music.stopMusic(music.bgMusic);
+}
+
+function finishGame(result) {
+  gameStarted = false;
+  timer.stopTime();
+  pop_up.showPopupScreen(result);
+  music.stopMusic(music.bgMusic);
+}
+
+function initGame() {
+  field.innerHTML = '';
+  countNum = CARROT_COUNT;
+  timeLeft = GAME_DURATION_SEC;
+  gameCounter.innerText = CARROT_COUNT;
+  timer.updateTimerText(timeLeft);
+  play_section.initField();
+}
+
+function showStopButton() {
+  const icon =  btn_play.firstElementChild;
+  icon.classList.replace('fa-play','fa-stop');
+}
+
+function hideGameButton() {
+  btn_play.style.visibility = "hidden";
+}
+
+function showTimerAndScore() {
+  gameTimer.style.visibility = 'visible';
+  gameCounter.style.visibility = 'visible';
+}
