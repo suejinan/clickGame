@@ -152,12 +152,10 @@ class Field {
       this.updateCountBoard();
       if (countNum === 0) {
         finishGame("win");
-        music.playMusic(music.winMusic);
       }
       
     } else if (target.dataset.type === 'bug') {
       timer.stopTime();
-      music.playMusic(music.bugPull);
       finishGame("lose");
     }
   }
@@ -177,6 +175,7 @@ class Music {
   }
 
   playMusic(audio) {
+    sound.currentTime = 0;
     audio.play();
   }
 
@@ -220,6 +219,11 @@ function finishGame(result) {
   gameStarted = false;
   timer.stopTime();
   pop_up.showPopupScreen(result);
+  if (result === "win") {
+    music.playMusic(music.winMusic);
+  } else {
+    music.playMusic(music.bugPull);
+  }
   music.stopMusic(music.bgMusic);
 }
 
