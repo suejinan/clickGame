@@ -136,7 +136,10 @@ class Field {
     const randomX = Math.random()*(this.width-CARROT_SIZE);
     const randomY = Math.random()*(this.height-CARROT_SIZE);
 
-    item.style.transform = `translateX(${randomX}px) translateY(${randomY}px)`;
+    // item hover시 transform 적용하기 위해
+    //item.style.transform = `translateX(${randomX}px) translateY(${randomY}px)`;
+    item.style.left = `${randomX}px`;
+    item.style.top = `${randomY}px`;
   }
   
   onClickItem(event) {
@@ -175,7 +178,7 @@ class Music {
   }
 
   playMusic(audio) {
-    sound.currentTime = 0;
+    audio.currentTime = 0;
     audio.play();
   }
 
