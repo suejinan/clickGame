@@ -29,7 +29,7 @@ export default class Popup {
         break;
         
       default:
-        break;
+        throw new Error('not valid result');
     } 
 
     this.pop_up.classList.remove('hide');
