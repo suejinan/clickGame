@@ -1,6 +1,7 @@
 'use strict';
 import Popup from "./popup.js";
 import Field from "./field.js";
+import * as sound from "./sound.js";
 
 const CARROT_COUNT = 10;
 const BUG_COUNT = 7;
@@ -51,30 +52,9 @@ class Timer {
   }
 }
 
-class Music {
-  constructor() {
-    this.bgMusic = new Audio('sound/bg.mp3');
-    this.bugPull = new Audio('sound/bug_pull.mp3');
-    this.carrotPull = new Audio('sound/carrot_pull.mp3');
-    this.winMusic = new Audio('sound/game_win.mp3');
-    this.alertMusic = new Audio('sound/alert.wav');
-  }
-
-  playMusic(audio) {
-    audio.currentTime = 0;
-    audio.play();
-  }
-
-  stopMusic(audio) {
-    audio.pause();
-  }
-
-}
-
 const timer = new Timer(gameTimer);
 const play_section = new Field(CARROT_COUNT, BUG_COUNT);
 const pop_up = new Popup();
-const music = new Music();
 
 pop_up.setClickListener(startGame);
 play_section.setClickListener(onItemClick);
@@ -94,7 +74,7 @@ function startGame() {
   showStopButton();
   showTimerAndScore();
   timer.startTime();
-  music.playMusic(music.bgMusic);
+  sound.playBg();
 }
 
 function stopGame() {
@@ -102,8 +82,8 @@ function stopGame() {
   timer.stopTime();
   hideGameButton();
   pop_up.showPopupScreen("replay");
-  music.stopMusic(music.bgMusic);
-  music.playMusic(music.alertMusic);
+  sound.stopBg();
+  sound.playAlert();
 }
 
 function finishGame(result) {
@@ -112,12 +92,13 @@ function finishGame(result) {
   hideGameButton();
   pop_up.showPopupScreen(result);
   if (result === "win") {
-    music.playMusic(music.winMusic);
+    sound.playWin();
   } else {
-    music.playMusic(music.bugPull);
+    sound.playBug();
   }
-  music.stopMusic(music.bgMusic);
-  music.playMusic(music.alertMusic);
+  sound.stopBg();
+  sound.playAlert();
+
 }
 
 function initGame() {
