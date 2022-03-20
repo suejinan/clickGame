@@ -1,4 +1,6 @@
 'use strict';
+import Popup from "./popup.js";
+
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 10;
 const BUG_COUNT = 7;
@@ -50,47 +52,6 @@ class Timer {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     this.timeContainer.innerText = `${minutes}:${seconds}`;
-  }
-}
-
-class Popup {
-  constructor() {
-    this.pop_up = document.querySelector('.pop-up');
-    this.msg = document.querySelector('.pop-up__msg');
-    this.btn_replay = document.querySelector('.replay');
-    
-    this.btn_replay.addEventListener('click', () => {
-      this.hidePopupScreen();
-      startGame();
-    });
-  }
-  
-  showPopupScreen(msg) {
-    hideGameButton();
-
-    switch (msg) {
-      case 'win':
-        this.msg.textContent = 'You Won ! 🥳';
-        break;
-      case 'lose':
-        this.msg.textContent = `You lose ~ 😭`;
-        break;
-      case 'replay':
-        this.msg.textContent = `Replay ? 😊`;
-        break;
-        
-      default:
-        break;
-    } 
-
-    this.pop_up.classList.remove('hide');
-    music.stopMusic(music.bgMusic);
-    music.playMusic(music.alertMusic);
-  }
-  
-  hidePopupScreen() {
-    this.pop_up.classList.add('hide');
-    btn_play.style.visibility = "visible";
   }
 }
 
@@ -193,6 +154,8 @@ const play_section = new Field(field);
 const pop_up = new Popup();
 const music = new Music();
 
+pop_up.setClickListener(startGame);
+
 btn_play.addEventListener('click', () => {
   if (!gameStarted) {
     startGame();
@@ -214,13 +177,16 @@ function startGame() {
 function stopGame() {
   gameStarted = false;
   timer.stopTime();
+  hideGameButton();
   pop_up.showPopupScreen("replay");
   music.stopMusic(music.bgMusic);
+  music.playMusic(music.alertMusic);
 }
 
 function finishGame(result) {
-  gameStarted = false;
+  gameStarted  = false;
   timer.stopTime();
+  hideGameButton();
   pop_up.showPopupScreen(result);
   if (result === "win") {
     music.playMusic(music.winMusic);
@@ -228,6 +194,7 @@ function finishGame(result) {
     music.playMusic(music.bugPull);
   }
   music.stopMusic(music.bgMusic);
+  music.playMusic(music.alertMusic);
 }
 
 function initGame() {
@@ -240,6 +207,7 @@ function initGame() {
 }
 
 function showStopButton() {
+  btn_play.style.visibility = "visible";
   const icon =  btn_play.firstElementChild;
   icon.classList.replace('fa-play','fa-stop');
 }
