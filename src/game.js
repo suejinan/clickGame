@@ -1,6 +1,7 @@
 'use strict';
 
 import Field from "./field.js";
+import Timer from "./timer.js";
 import * as sound from "./sound.js";
 
 export default class Game {
@@ -115,47 +116,4 @@ export default class Game {
       this.finish("lose");
     }
   }
-}
-
-class Timer {
-  constructor(timeLeft) {
-    this.gameTimer = document.querySelector(".game__timer");
-    this.timer = undefined;
-    this.timeLeft = timeLeft;
-  }
-
-  setTimeOutListener(timeout) {
-    this.timeout = timeout;
-  }
-
-  countTime() {
-    this.updateTimerText(this.timeLeft);
-    if (this.timeLeft > 0) {
-      --this.timeLeft;
-      console.log(this.timeLeft);
-      this.updateTimerText(this.timeLeft);
-
-    } else {
-      clearInterval(this.timer);
-      this.timeout();
-
-    }
-  }
-
-  startTime() {
-    this.timer =  setInterval(() => {
-      this.countTime();
-    }, 1000);
-  }
-
-  stopTime() {
-    clearInterval(this.timer);
-  }
-
-  updateTimerText(time) {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    this.gameTimer.innerText = `${minutes}:${seconds}`;
-  }
-
 }
