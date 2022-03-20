@@ -7,8 +7,13 @@ export default class Field {
     this.bugCnt = bugCnt;
     this.field = document.querySelector('.game__field');;
     this.fieldRec = this.field.getBoundingClientRect();
-
-    this.field.addEventListener('click', this.onClick);
+    // 클래스내 함수를 콜백으로 전달할때는 해당 클래스의 정보가 사라지므로 this 바인딩 필요
+    // 1) this.onClick = this.onClick.bind(this); //onClick 함수를 클래스와 바인드
+    // 2) onClick = (e) => {} : 변수로 선언
+    // 3) () => {} : arrow function 사용
+    this.field.addEventListener('click', (e) => {
+      this.onClick(e);
+    });
 
   }
 
@@ -51,18 +56,14 @@ export default class Field {
   }
 
   
-  
   onClick(event) {
     const target = event.target;
 
     if (target.dataset.type === 'carrot') {
       target.remove();
     }
-    if(this.onItemClick) {
-      this.onItemClick(target.dataset.type);
-    } 
+    this.onItemClick && this.onItemClick(target.dataset.type);
   }
-
 }
 
 function getRandomCoord(min, max) {

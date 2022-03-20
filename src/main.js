@@ -131,7 +131,7 @@ function onItemClick(type) {
   }
 
   if (type === 'carrot') {
-    music.playMusic(music.carrotPull);
+    sound.playCarrot();
     countNum--;
     updateCountBoard();
     if (countNum === 0) {
@@ -139,7 +139,7 @@ function onItemClick(type) {
     }
     
   } else if (type === 'bug') {
-    music.playMusic(music.bugPull);
+    sound.playBug();
     timer.stopTime();
     finishGame("lose");
   }
