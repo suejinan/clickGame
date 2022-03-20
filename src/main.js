@@ -1,17 +1,13 @@
 'use strict';
 import Popup from "./popup.js";
+import Field from "./field.js";
 
-const CARROT_SIZE = 80;
 const CARROT_COUNT = 10;
 const BUG_COUNT = 7;
 const GAME_DURATION_SEC = 10;
 
-const bug = {type:"bug", img:"img/bug.png", sound:"bug_pull.mp3"};
-const carrot = {type:"carrot", img:"img/carrot.png",sound:"carrot_pull.mp3"};
-
 const btn_play = document.querySelector('.game__button');
 
-const field = document.querySelector('.game__field');
 const gameCounter = document.querySelector('.game__counter');
 const gameTimer = document.querySelector(".game__timer");
 
@@ -55,80 +51,6 @@ class Timer {
   }
 }
 
-class Field {
-  constructor(field) {
-    this.field = field;
-    this.fieldRec = field.getBoundingClientRect();
-
-    this.width = this.fieldRec.width;
-    this.height = this.fieldRec.height;
-    this.minX = this.fieldRec.left;
-    this.minY = this.fieldRec.top;
-
-    this.field.addEventListener('click', (event) => {
-      this.onClickItem(event)
-    });
-
-  }
-
-  setItems(itemType, itemNum) {
-    for (let i=0; i<itemNum; i++) {
-      const newItem = this.createItem(itemType);
-      this.field.appendChild(newItem);
-    }
-  }
-
-  initField() {
-    this.setItems(bug, BUG_COUNT);
-    this.setItems(carrot, CARROT_COUNT);
-  }
-
-  createItem(type) {
-    const item = document.createElement('img');
-    item.setAttribute('class', `item`);
-    item.setAttribute('src', `${type.img}`);
-    item.setAttribute('data-type', `${type.type}`);
-    this.getRandomCoord(item);
-
-    return item
-  }
-
-  getRandomCoord(item) {
-    const randomX = Math.random()*(this.width-CARROT_SIZE);
-    const randomY = Math.random()*(this.height-CARROT_SIZE);
-
-    // item hover시 transform 적용하기 위해
-    //item.style.transform = `translateX(${randomX}px) translateY(${randomY}px)`;
-    item.style.left = `${randomX}px`;
-    item.style.top = `${randomY}px`;
-  }
-  
-  onClickItem(event) {
-    if (!gameStarted) {
-      return;
-    }
-    const target = event.target;
-
-    if (target.dataset.type === 'carrot') {
-      music.playMusic(music.carrotPull);
-      target.remove();
-      countNum--;
-      this.updateCountBoard();
-      if (countNum === 0) {
-        finishGame("win");
-      }
-      
-    } else if (target.dataset.type === 'bug') {
-      timer.stopTime();
-      finishGame("lose");
-    }
-  }
-
-  updateCountBoard() {
-    gameCounter.innerText = countNum;
-  }
-}
-
 class Music {
   constructor() {
     this.bgMusic = new Audio('sound/bg.mp3');
@@ -150,11 +72,12 @@ class Music {
 }
 
 const timer = new Timer(gameTimer);
-const play_section = new Field(field);
+const play_section = new Field(CARROT_COUNT, BUG_COUNT);
 const pop_up = new Popup();
 const music = new Music();
 
 pop_up.setClickListener(startGame);
+play_section.setClickListener(onItemClick);
 
 btn_play.addEventListener('click', () => {
   if (!gameStarted) {
@@ -198,12 +121,11 @@ function finishGame(result) {
 }
 
 function initGame() {
-  field.innerHTML = '';
-  countNum = CARROT_COUNT;
   timeLeft = GAME_DURATION_SEC;
+  countNum = CARROT_COUNT;
   gameCounter.innerText = CARROT_COUNT;
   timer.updateTimerText(timeLeft);
-  play_section.initField();
+  play_section.init();
 }
 
 function showStopButton() {
@@ -219,4 +141,30 @@ function hideGameButton() {
 function showTimerAndScore() {
   gameTimer.style.visibility = 'visible';
   gameCounter.style.visibility = 'visible';
+}
+
+function onItemClick(type) {
+  console.log("clicked!");
+  if (!gameStarted) {
+    return;
+  }
+
+  if (type === 'carrot') {
+    music.playMusic(music.carrotPull);
+    countNum--;
+    updateCountBoard();
+    if (countNum === 0) {
+      finishGame("win");
+    }
+    
+  } else if (type === 'bug') {
+    music.playMusic(music.bugPull);
+    timer.stopTime();
+    finishGame("lose");
+  }
+
+}
+
+function updateCountBoard() {
+  gameCounter.innerText = countNum;
 }
