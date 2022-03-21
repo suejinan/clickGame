@@ -17,20 +17,6 @@ export default class Popup {
   }
   
   showPopupScreen(msg) {
-    // switch (msg) {
-    //   case 'win':
-    //     this.msg.textContent = 'You Won ! 🥳';
-    //     break;
-    //   case 'lose':
-    //     this.msg.textContent = `You lose ~ 😭`;
-    //     break;
-    //   case 'replay':
-    //     this.msg.textContent = `Replay ? 😊`;
-    //     break;
-        
-    //   default:
-    //     throw new Error('not valid result');
-    // } 
     this.msg.textContent = msg;
     this.pop_up.classList.remove('hide');
   }

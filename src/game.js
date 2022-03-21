@@ -68,7 +68,7 @@ class Game {
   start() {
     this.timer = new Timer(this.timeLeft);
     this.timer.setTimeOutListener(() => {
-      this.finish(Result.lose)
+      this.stop(Result.lose)
     });
     this.gameStarted = true;
     this.init();
@@ -78,13 +78,13 @@ class Game {
     sound.playBg();
   }
   
-  stop() {
+  stop(result) {
     this.gameStarted = false;
     this.timer.stopTime();
     this.hideGameButton();
     sound.stopBg();
-    sound.playAlert();
-    this.onGameStop && this.onGameStop(Result.cancel);
+    
+    this.onGameStop && this.onGameStop(result);
   }
 
   init() {
@@ -92,21 +92,6 @@ class Game {
     this.updateCountBoard();
     this.timer.updateTimerText(this.timeLeft);
     this.playSection.init();
-  }
-
-  finish(result) {
-    this.gameStarted  = false;
-    this.timer.stopTime();
-    this.hideGameButton();
-    if (result === Result.win) {
-      sound.playWin();
-    } else {
-      sound.playBug();
-    }
-    sound.stopBg();
-    sound.playAlert();
-    this.onGameStop && this.onGameStop(result);
-  
   }
 
   showStopButton() {
@@ -139,13 +124,13 @@ class Game {
       this.countNum--;
       this.updateCountBoard();
       if (this.countNum === 0) {
-        this.finish(Result.win);
+        this.stop(Result.win);
       }
       
     } else if (type === 'bug') {
       sound.playBug();
       this.timer.stopTime();
-      this.finish(Result.lose);
+      this.stop(Result.lose);
     }
     
     return true;

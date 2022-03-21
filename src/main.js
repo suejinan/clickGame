@@ -1,6 +1,7 @@
 'use strict';
 import Popup from "./popup.js";
 import {GameBuilder, Result} from "./game.js"
+import * as sound from "./sound.js";
 
 const CARROT_COUNT = 10;
 const BUG_COUNT = 7;
@@ -18,12 +19,15 @@ game.setGameStopListener((result) => {
   switch (result) {
     case Result.win:
       msg = 'You Won ! 🥳';
+      sound.playWin();
       break;
     case Result.lose:
       msg = `You lose ~ 😭`;
+      sound.playBug();
       break;
     case Result.cancel:
       msg = `Replay ? 😊`;
+      sound.playAlert();
       break;
       
     default:
