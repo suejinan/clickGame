@@ -58,12 +58,13 @@ export default class Field {
   
   onClick(event) {
     const target = event.target;
-
-    if (target.dataset.type === 'carrot') {
-      target.remove();
+    if(this.onItemClick && this.onItemClick(target.dataset.type)) {
+      if (target.dataset.type === 'carrot') {
+        target.remove();
+      }
     }
-    this.onItemClick && this.onItemClick(target.dataset.type);
   }
+  
 }
 
 function getRandomCoord(min, max) {

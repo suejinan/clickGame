@@ -4,7 +4,33 @@ import Field from "./field.js";
 import Timer from "./timer.js";
 import * as sound from "./sound.js";
 
-export default class Game {
+// Builder Pattern
+export default class GameBuilder {
+  setgameDuration(duration) {
+    this.gameDuration = duration;
+    return this;  // Class를 리턴
+  }
+
+  setcarrotCount(num) {
+    this.carrotCount = num;
+    return this;
+  }
+
+  setbugCount(num) {
+    this.bugCount = num;
+    return this;
+  }
+
+  build() {
+    return new Game(
+      this.gameDuration, 
+      this.carrotCount, 
+      this.bugCount
+    )
+  }
+}
+
+class Game {
   constructor(gameDuration, carrotCount, bugCount) {
     this.timeLeft = gameDuration;
     this.carrotCount = carrotCount;
@@ -99,7 +125,7 @@ export default class Game {
   onItemClick = (type) => {
     console.log("clicked!");
     if (!this.gameStarted) {
-      return;
+      return false;
     }
   
     if (type === 'carrot') {
@@ -115,5 +141,7 @@ export default class Game {
       this.timer.stopTime();
       this.finish("lose");
     }
+    
+    return true;
   }
 }
