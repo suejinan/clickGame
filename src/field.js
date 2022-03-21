@@ -1,7 +1,12 @@
 'use strict';
 const CARROT_SIZE = 80;
 
-export default class Field {
+export const Itemtype = Object.freeze({
+  carrot : 'carrot',
+  bug : 'bug',
+});
+
+export class Field {
   constructor(carrotCnt, bugCnt) {
     this.carrotCnt = carrotCnt;
     this.bugCnt = bugCnt;
@@ -30,8 +35,8 @@ export default class Field {
 
   init() {
     this.field.innerHTML = '';
-    this._setItems('bug', this.bugCnt);
-    this._setItems('carrot', this.carrotCnt);
+    this._setItems(Itemtype.bug, this.bugCnt);
+    this._setItems(Itemtype.bug, this.carrotCnt);
   }
 
   _createItem(type) {
@@ -55,11 +60,10 @@ export default class Field {
     return item
   }
 
-  
   onClick(event) {
     const target = event.target;
     if(this.onItemClick && this.onItemClick(target.dataset.type)) {
-      if (target.dataset.type === 'carrot') {
+      if (target.dataset.type === Itemtype.carrot) {
         target.remove();
       }
     }
