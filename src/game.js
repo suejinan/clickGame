@@ -4,8 +4,14 @@ import Field from "./field.js";
 import Timer from "./timer.js";
 import * as sound from "./sound.js";
 
+export const Result = Object.freeze({
+  win: 'win',
+  lose: 'lose',
+  cancel: 'cancel',
+});
+
 // Builder Pattern
-export default class GameBuilder {
+export class GameBuilder {
   setgameDuration(duration) {
     this.gameDuration = duration;
     return this;  // Class를 리턴
@@ -62,7 +68,7 @@ class Game {
   start() {
     this.timer = new Timer(this.timeLeft);
     this.timer.setTimeOutListener(() => {
-      this.finish('lose')
+      this.finish(Result.lose)
     });
     this.gameStarted = true;
     this.init();
@@ -78,7 +84,7 @@ class Game {
     this.hideGameButton();
     sound.stopBg();
     sound.playAlert();
-    this.onGameStop && this.onGameStop('replay');
+    this.onGameStop && this.onGameStop(Result.cancel);
   }
 
   init() {
@@ -92,7 +98,7 @@ class Game {
     this.gameStarted  = false;
     this.timer.stopTime();
     this.hideGameButton();
-    if (result === "win") {
+    if (result === Result.win) {
       sound.playWin();
     } else {
       sound.playBug();
@@ -133,13 +139,13 @@ class Game {
       this.countNum--;
       this.updateCountBoard();
       if (this.countNum === 0) {
-        this.finish("win");
+        this.finish(Result.win);
       }
       
     } else if (type === 'bug') {
       sound.playBug();
       this.timer.stopTime();
-      this.finish("lose");
+      this.finish(Result.lose);
     }
     
     return true;
