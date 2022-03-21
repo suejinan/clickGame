@@ -1,6 +1,6 @@
 'use strict';
 
-import Field from "./field.js";
+import { Field, Itemtype } from "./field.js";
 import Timer from "./timer.js";
 import * as sound from "./sound.js";
 
@@ -119,7 +119,7 @@ class Game {
       return false;
     }
   
-    if (type === 'carrot') {
+    if (type === Itemtype.carrot) {
       sound.playCarrot();
       this.countNum--;
       this.updateCountBoard();
@@ -127,7 +127,7 @@ class Game {
         this.stop(Result.win);
       }
       
-    } else if (type === 'bug') {
+    } else if (type === Itemtype.bug) {
       sound.playBug();
       this.timer.stopTime();
       this.stop(Result.lose);
