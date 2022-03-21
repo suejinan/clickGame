@@ -4,7 +4,33 @@ import Field from "./field.js";
 import Timer from "./timer.js";
 import * as sound from "./sound.js";
 
-export default class Game {
+// Builder Pattern
+export default class GameBuilder {
+  setgameDuration(duration) {
+    this.gameDuration = duration;
+    return this;  // Class를 리턴
+  }
+
+  setcarrotCount(num) {
+    this.carrotCount = num;
+    return this;
+  }
+
+  setbugCount(num) {
+    this.bugCount = num;
+    return this;
+  }
+
+  build() {
+    return new Game(
+      this.gameDuration, 
+      this.carrotCount, 
+      this.bugCount
+    )
+  }
+}
+
+class Game {
   constructor(gameDuration, carrotCount, bugCount) {
     this.timeLeft = gameDuration;
     this.carrotCount = carrotCount;
