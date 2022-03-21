@@ -99,7 +99,7 @@ export default class Game {
   onItemClick = (type) => {
     console.log("clicked!");
     if (!this.gameStarted) {
-      return;
+      return false;
     }
   
     if (type === 'carrot') {
@@ -115,5 +115,7 @@ export default class Game {
       this.timer.stopTime();
       this.finish("lose");
     }
+    
+    return true;
   }
 }
