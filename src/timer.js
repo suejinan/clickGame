@@ -19,7 +19,7 @@ export default class Timer {
       this.updateTimerText(this.timeLeft);
 
     } else {
-      clearInterval(this.timer);
+      this.stopTime();
       this.timeout();
 
     }
